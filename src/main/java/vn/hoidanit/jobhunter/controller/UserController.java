@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.hoidanit.jobhunter.domain.User;
 import vn.hoidanit.jobhunter.service.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 public class UserController {
@@ -43,4 +44,9 @@ public class UserController {
         return this.userService.fetAllUser();
     }
 
+    @PutMapping("/user")
+    public User updateUser(@RequestBody User user) {
+        User updUser = this.userService.handleUpdateUser(user);
+        return updUser;
+    }
 }
