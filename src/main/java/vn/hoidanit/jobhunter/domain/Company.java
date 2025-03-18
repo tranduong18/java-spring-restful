@@ -1,7 +1,7 @@
 package vn.hoidanit.jobhunter.domain;
 
 import java.time.Instant;
-import com.fasterxml.jackson.annotation.JsonFormat;
+// import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
