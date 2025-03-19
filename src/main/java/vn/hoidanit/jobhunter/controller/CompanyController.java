@@ -9,6 +9,9 @@ import vn.hoidanit.jobhunter.domain.Company;
 import vn.hoidanit.jobhunter.domain.response.ResultPaginationDTO;
 import vn.hoidanit.jobhunter.service.CompanyService;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
+import vn.hoidanit.jobhunter.util.error.IdInvalidException;
+
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,11 +40,22 @@ public class CompanyController {
     }
 
     @GetMapping("/companies")
-    @ApiMessage("fetch all companies")
+    @ApiMessage("Fetch all companies")
     public ResponseEntity<ResultPaginationDTO> getCompany(
             @Filter Specification<Company> spec, Pageable pageable) {
         ResultPaginationDTO companies = this.companyService.handleGetCompany(spec, pageable);
         return ResponseEntity.ok(companies);
+    }
+
+    @GetMapping("/companies/{id}")
+    @ApiMessage("Fetch company by id")
+    public ResponseEntity<Company> fetchCompanyById(@PathVariable("id") long id) throws IdInvalidException {
+        Optional<Company> cOptional = this.companyService.findById(id);
+        if (cOptional.isEmpty()) {
+            throw new IdInvalidException("Company với id = " + id + " không tồn tại");
+        }
+        return ResponseEntity.ok().body(cOptional.get());
+
     }
 
     @PutMapping("/companies")
