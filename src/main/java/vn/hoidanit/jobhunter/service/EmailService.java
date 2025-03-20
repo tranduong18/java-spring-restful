@@ -1,35 +1,31 @@
 package vn.hoidanit.jobhunter.service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import vn.hoidanit.jobhunter.domain.Job;
-import vn.hoidanit.jobhunter.repository.JobRepository;
 
 @Service
 public class EmailService {
     private final MailSender mailSender;
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-    private final JobRepository jobRepository;
 
     public EmailService(MailSender mailSender, JavaMailSender javaMailSender,
-            SpringTemplateEngine templateEngine, JobRepository jobRepository) {
+            SpringTemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
-        this.jobRepository = jobRepository;
     }
 
     public void sendSimpleEmail() {
@@ -55,12 +51,11 @@ public class EmailService {
         }
     }
 
-    public void sendEmailFromTempleSync(String to, String subject, String templateName) {
+    @Async
+    public void sendEmailFromTempleSync(String to, String subject, String templateName, String username, Object value) {
         Context context = new Context();
-        List<Job> arrJob = this.jobRepository.findAll();
-        String name = "Duong";
-        context.setVariable("name", name);
-        context.setVariable("jobs", arrJob);
+        context.setVariable("username", username);
+        context.setVariable("jobs", value);
 
         String content = templateEngine.process(templateName, context);
         this.sendEmailSync(to, subject, content, false, true);
