@@ -19,7 +19,8 @@ public class EmailController {
     @GetMapping("/email")
     @ApiMessage("Send simple email")
     public String sendSimpleEmail() {
-        this.emailService.sendSimpleEmail();
+        // this.emailService.sendSimpleEmail();
+        this.emailService.sendEmailFromTempleSync("sinhviendaihoc2k3@gmail.com", "test send email", "job");
         return "ok";
     }
 }
