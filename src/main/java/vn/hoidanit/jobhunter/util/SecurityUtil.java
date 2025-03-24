@@ -56,19 +56,11 @@ public class SecurityUtil {
         Instant now = Instant.now();
         Instant validity = now.plus(this.accessTokenExpiration, ChronoUnit.SECONDS);
 
-        // hardcode permission (for testing)
-        List<String> listAuthority = new ArrayList<String>();
-
-        listAuthority.add("ROLE_USER_CREATE");
-        listAuthority.add("ROLE_USER_UPDATE");
-
-        // @formatter:off
         JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuedAt(now)
             .expiresAt(validity)
             .subject(email)
             .claim("user", userToken)
-            .claim("permission", listAuthority)
             .build();
             
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
@@ -85,11 +77,11 @@ public class SecurityUtil {
         userToken.setName(dto.getUser().getName());
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-        .issuedAt(now)
-        .expiresAt(validity)
-        .subject(email)
-        .claim("user", userToken)
-        .build();
+            .issuedAt(now)
+            .expiresAt(validity)
+            .subject(email)
+            .claim("user", userToken)
+            .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

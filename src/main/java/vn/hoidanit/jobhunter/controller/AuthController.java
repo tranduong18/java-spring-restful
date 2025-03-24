@@ -125,7 +125,6 @@ public class AuthController {
         // check user by token + email
         User currentUser = this.userService.getUserByRefreshTokenAndEmail(refresh_token, email);
         if (currentUser == null) {
-            System.out.println(currentUser);
             throw new IdInvalidException("Refresh Token không hợp lệ");
         }
 
@@ -165,7 +164,7 @@ public class AuthController {
                 ? SecurityUtil.getCurrentUserLogin().get()
                 : "";
 
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             throw new IdInvalidException("Access Token không hợp lệ");
         }
 
