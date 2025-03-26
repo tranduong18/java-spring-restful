@@ -30,6 +30,7 @@ import vn.hoidanit.jobhunter.util.SecurityUtil;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
+// cho phép phân quyền ở mức độ phương thức
 public class SecurityConfiguration {
     @Value("${hoidanit.jwt.base64-secret}")
     private String jwtKey;
@@ -74,6 +75,7 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    // Trích xuất thông tin quyền hạn từ jwt
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -85,6 +87,7 @@ public class SecurityConfiguration {
         return jwtAuthenticationConverter;
     }
 
+    // giải mã jwt
     @Bean
     public JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey())
@@ -100,11 +103,13 @@ public class SecurityConfiguration {
         };
     }
 
+    // mã hóa jwt
     @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
     }
 
+    // lấy khóa bí mật để mã hóa và giải mã jwt
     private SecretKey getSecretKey() {
         byte[] keyBytes = Base64.from(jwtKey).decode();
         return new SecretKeySpec(keyBytes, 0, keyBytes.length,

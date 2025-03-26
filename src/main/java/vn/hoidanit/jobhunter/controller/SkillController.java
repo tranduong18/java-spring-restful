@@ -34,7 +34,7 @@ public class SkillController {
     @PostMapping("/skills")
     @ApiMessage("Create a skill")
     public ResponseEntity<Skill> create(@Valid @RequestBody Skill s) throws IdInvalidException {
-        // check anme
+        // check name
         if (s.getName() != null && this.skillService.isNameExist(s.getName())) {
             throw new IdInvalidException("Skill name = " + s.getName() + " đã tồn tại");
         }

@@ -24,6 +24,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 
     @Override
     @Transactional
+    // Đảm bảo các truy vấn xuống database, hỗ trợ rollback lại nếu có ngoại lệ
     public boolean preHandle(
             HttpServletRequest request,
             HttpServletResponse response, Object handler) throws Exception {
